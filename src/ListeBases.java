@@ -8,6 +8,12 @@ public class ListeBases {
 	private ArrayList<Base> _listeBases = new ArrayList<Base>();
 	private String _fichier;
 	
+	
+	
+	public ListeBases() {
+		
+	}
+	
 	public ListeBases(String fichier) {
 		this._fichier = fichier;
 		//lire le fichier 
@@ -54,4 +60,15 @@ public class ListeBases {
 			b.afficherEntreprises();
 		}
 	}
+	
+	public void set_coutListeBase(int _coutListeBase) {
+		this._coutListeBase = _coutListeBase;
+	}
+
+
+
+	public void set_listeBases(ArrayList<Base> _listeBases) {
+		this._listeBases = _listeBases;
+	}
+
 }

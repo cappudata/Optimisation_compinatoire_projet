@@ -48,12 +48,23 @@ public class Test {
 		ListeEntreprises listeEnt3 = new ListeEntreprises("Data/Scénarios/Liste Entreprises/Liste_Ent3.txt");
 		
 		
-		ArrayList<ListeBases> LesListeBases = new ArrayList<ListeBases>();
-		LesListeBases.add(listBases1);
-		LesListeBases.add(listBases2);
-		LesListeBases.add(listBases3);
+		/*
+		ArrayList<Integer> ListCout = Branch_and_bound.trierCout(listBases1);
+		System.out.println(ListCout);
+		System.out.println(ListCout.size());
+		*/
 		
-		ListeBases listeBases = Branch_and_bound.regle_de_branchement(LesListeBases);
-		System.out.println(listeBases.getFichier());
+		
+		double cost1 = Branch_and_bound.BBFunction_Binaire(listBases1, listeEnt1);
+		System.out.println(  cost1);
+		
+		
+		double cost2 = Branch_and_bound.BBFunction_Binaire(listBases2, listeEnt2);
+		System.out.println( cost2);
+		
+		
+		double cost3 = Branch_and_bound.BBFunction_Binaire(listBases3, listeEnt3);
+		System.out.println( cost3);
+		
 	}
 }
