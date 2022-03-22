@@ -48,23 +48,54 @@ public class Test {
 		ListeEntreprises listeEnt3 = new ListeEntreprises("Data/Scénarios/Liste Entreprises/Liste_Ent3.txt");
 		
 		
-		/*
-		ArrayList<Integer> ListCout = Branch_and_bound.trierCout(listBases1);
+	
+		ArrayList<Integer> ListCout = Branch_and_bound.trierCout(listBases2);
 		System.out.println(ListCout);
 		System.out.println(ListCout.size());
-		*/
+	
 		
 		
-		double cost1 = Branch_and_bound.BBFunction_Binaire(listBases1, listeEnt1);
-		System.out.println(  cost1);
+		//double cost1 = Branch_and_bound.BBFunction_Binaire(listBases1, listeEnt1);
+		//System.out.println(  cost1);
 		
 		
-		double cost2 = Branch_and_bound.BBFunction_Binaire(listBases2, listeEnt2);
-		System.out.println( cost2);
+		//double cost2 = Branch_and_bound.BBFunction_Binaire(listBases2, listeEnt2);
+		//System.out.println( cost2);
 		
 		
-		double cost3 = Branch_and_bound.BBFunction_Binaire(listBases3, listeEnt3);
-		System.out.println( cost3);
+		//double cost3 = Branch_and_bound.BBFunction_Binaire(listBases3, listeEnt3);
+		//System.out.println( cost3);
+		
+		System.out.println("****************");
+		
+		ArrayList<String> dn1 = new ArrayList<String>();
+		dn1.add("ed1");
+		dn1.add("ed2");
+		dn1.add("ed3");
+		
+		ArrayList<String> gn1 = new ArrayList<String>();
+		gn1.add("eg1");
+		gn1.add("eg2");
+		gn1.add("eg3");
+		
+		ArrayList<String> gn2 = new ArrayList<String>();
+		gn2.add("eg1_1");
+		gn2.add("eg1_2");
+	
+		
+		ArrayList<String> dn2 = new ArrayList<String>();
+		dn2.add("ed1_1");
+		dn2.add("ed1_2");
+	
+		
+		Noeud racine = new Noeud();
+		racine.addFilsDroit(dn1, "Dn1");
+		racine.addFilsGauche(gn1, "Gn1");
+		
+		racine.getNoeud("Gn1").addFilsGauche(gn2, "Gn2");
+		racine.getNoeud("Dn1").addFilsGauche(dn2, "Dn2");
+		racine.afficher();
+		
 		
 	}
 }

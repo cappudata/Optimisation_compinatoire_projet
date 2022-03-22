@@ -82,6 +82,10 @@ public class Branch_and_bound {
 				}	
 			}	
 		}	
+		
+		for (String str : LEnt) {
+			System.out.println(str);
+		}
 		return UB;
 	}
 	
