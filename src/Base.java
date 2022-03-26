@@ -9,11 +9,12 @@ import java.util.ArrayList;
 public class Base {
 	private int _coutBase = 0;
 	private ArrayList<String> _entreprises = new ArrayList<String>();
-	
+	private String _namefichier;
 	
 	
 	public Base(String fichier) {
 		//lire le fichier 
+		this._namefichier = fichier;
 		try (BufferedReader br = new BufferedReader(new FileReader(fichier))) {
 			String line;
 			while((line = br.readLine()) != null) {
@@ -47,10 +48,17 @@ public class Base {
 		return this._entreprises.size();
 	}
 	
+	
 	public void afficherEntreprises() {
 		for (String str : this._entreprises) {
 			System.out.println(str);
 		}
 	}
+	
+	public String toString() {
+		return this._namefichier;
+	}
+	
+	
 	
 }

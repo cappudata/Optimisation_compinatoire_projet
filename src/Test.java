@@ -66,8 +66,11 @@ public class Test {
 		//double cost3 = Branch_and_bound.BBFunction_Binaire(listBases3, listeEnt3);
 		//System.out.println( cost3);
 		
+		System.out.println(base1.toString());
+		
 		System.out.println("****************");
 		
+		/*
 		ArrayList<String> dn1 = new ArrayList<String>();
 		dn1.add("ed1");
 		dn1.add("ed2");
@@ -89,13 +92,16 @@ public class Test {
 	
 		
 		Noeud racine = new Noeud();
-		racine.addFilsDroit(dn1, "Dn1");
-		racine.addFilsGauche(gn1, "Gn1");
+		racine.addFilsDroit(dn1, "Dn1",1);
+		racine.addFilsGauche(gn1, "Gn1",1);
 		
-		racine.getNoeud("Gn1").addFilsGauche(gn2, "Gn2");
-		racine.getNoeud("Dn1").addFilsGauche(dn2, "Dn2");
+		racine.getNoeud("Gn1").addFilsGauche(gn2, "Gn2",1);
+		racine.getNoeud("Dn1").addFilsGauche(dn2, "Dn2",1);
 		racine.afficher();
+		*/
 		
+		Branch_and_bound BB1 = new Branch_and_bound(listBases2,listeEnt2);
+		System.out.println(BB1.BnB());
 		
 	}
 }
