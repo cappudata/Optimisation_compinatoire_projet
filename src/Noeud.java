@@ -8,73 +8,72 @@ public class Noeud {
 	private Noeud _filsGauche;
 	private Noeud _filsDroit;
 	private ArrayList<String> _listeEnt = new ArrayList<String>();
-	private boolean[] _parcouruBase;
-
+	private ArrayList<Boolean> _parcouruBase = new ArrayList<Boolean>();
+	private ArrayList<String> _listeBase = new ArrayList<String>();
 	
 	public static ArrayList<Noeud> ListeNoeds = new ArrayList<Noeud>();
 	//public static Noeud _racine;
 	
 	
 	
-	public Noeud(ListeBases listeBases) {
+	public Noeud(ListeBases listeBases, int cout) {
 		this._name = "Racine";
 		ListeNoeds.add(this);
+		this._cout = cout;
+		
 		
 		//Initialiser un tableau boolean pour savoir si ce noeu a parcouru quel base ?
 		// True => déjà parcouru
 		// False => pas encore
 		int tailleListeBase = listeBases.getListeBases().size();
-		this._parcouruBase = new boolean[tailleListeBase];
-		for (int i=0; i<this._parcouruBase.length; i++) {
-			this._parcouruBase[i] = false;
-		}
-	
+		for (int i=0; i<tailleListeBase; i++) {
+			this._parcouruBase.add(false);
+		}		
 	}
 	
-	public Noeud(ArrayList<String> listeEnt) {
+	private Noeud(ArrayList<String> listeEnt) {
 		this._listeEnt = listeEnt;
 		
 	}
 	
 	
-	public void appliquerBase(Base b, ArrayList<String> ListEntCherche, ArrayList<String> liste, int cout, double UB ) {
+
+	//v2
+	public void appliquerBase(Base b, ArrayList<String> ListEntCherche, ArrayList<String> liste, int cout, double UB, Donnees bnb, int i ) {
 		
-		int new_cout = cout + b.getCoutBase();
-		if (new_cout < UB) {
+		ArrayList<String> new_list = new ArrayList<String>(liste);
+		Donnees bb = bnb;
 			//filsDroit : on n'applique pas la base
-			this.addFilsDroit(this._listeEnt, "not applique" + b.toString(), this._cout);
+			this.addFilsDroit(liste, "not applique" + b.toString(), this._cout,i);
 
 			//filsGauche : on applique la base		
 			ArrayList<String> listeEntBase = b.getEntreprises();
 			for (String ent : ListEntCherche) {
 				if (listeEntBase.contains(ent) ) {
-					if (!liste.contains(ent))
-						liste.add(ent);
+					if (!new_list.contains(ent))
+						new_list.add(ent);
 				}
 			}
-			this.addFilsGauche(liste, "applique" + b.toString(), new_cout);	
-		} else {
-			Branch_and_bound.recursivité(ListeNoeds.get(0), ListeNoeds.get(0).getListEntNoeud(), ListeNoeds, ListeNoeds.get(0).getCout(), UB);
-		}
+			this.addFilsGauche(new_list, "applique" + b.toString(), cout, i);	
 	}
-	
 
-
-	public void addFilsGauche(ArrayList<String> listEnt, String name, int cout) {
+	public void addFilsGauche(ArrayList<String> listEnt, String name, int cout, int i) {
 		Noeud n = new Noeud(listEnt);
 		n.setName(name);
 		this._filsGauche = n;
 		n.iniParcourirBase(_parcouruBase);
+		n.setParcourirBase(i);
 		n.setCout(cout);
 		this.ListeNoeds.add(0,n);
 	}
 	
 	
-	public void addFilsDroit(ArrayList<String> listEnt, String name, int cout) {
+	public void addFilsDroit(ArrayList<String> listEnt, String name, int cout, int i) {
 		Noeud n = new Noeud(listEnt);
 		n.setName(name);
 		this._filsDroit = n;
 		n.iniParcourirBase(_parcouruBase);
+		n.setParcourirBase(i);
 		n.setCout(cout);
 		this.ListeNoeds.add(0,n);
 	}
@@ -85,15 +84,19 @@ public class Noeud {
 	}
 	
 	
-	public void iniParcourirBase(boolean[] table) {
-		this._parcouruBase = table;
+	public void addBase(String base) {
+		
+	}
+	
+	public void iniParcourirBase(ArrayList<Boolean> table) {
+		this._parcouruBase = new ArrayList<Boolean>(table);
 	}
 	
 	public void setParcourirBase(int i) {
-		this._parcouruBase[i] = true;
+		this._parcouruBase.set(i, true);
 	}
 	
-	public boolean[] getParcourirBase() {
+	public ArrayList<Boolean> getParcourirBase() {
 		return this._parcouruBase;
 	}
 	

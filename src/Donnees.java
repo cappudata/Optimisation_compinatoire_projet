@@ -4,26 +4,27 @@ import java.util.LinkedList;
 
 import org.w3c.dom.Node;
 
-public class Branch_and_bound {
+public class Donnees {
 	
 	
-	private static ArrayList<Base> ListBases;	
-	private static ArrayList<String> ListEntCherche;
+	private ArrayList<Base> ListBases;	
+	private ArrayList<String> ListEntCherche;
 	private ListeBases _listeBases;
 	private ListeEntreprises _listeEntCherche;
 	
+	//UB = UperBound
+	private double UB = Double.POSITIVE_INFINITY;
 	
-	public Branch_and_bound(ListeBases listeBases, ListeEntreprises listeEntreprise) {
-		this.ListBases = listeBases.getListeBases(); 
-		this.ListEntCherche = listeEntreprise.getListeEntreprises();
-		
+	
+	public Donnees(ListeBases listeBases, ListeEntreprises listeEntreprise) {
 		this._listeBases = listeBases;
 		this._listeEntCherche = listeEntreprise;
-		
+		this.ListBases = listeBases.getListeBases(); 
+		this.ListEntCherche = listeEntreprise.getListeEntreprises();	
 	}
 	
 	//Trier les base dans une listBase en fonction le cout
-	public  ListeBases trierListBase(ListeBases ListeBasesDonnee) {
+	public static ListeBases trierListBase(ListeBases ListeBasesDonnee) {
 		int coutB = ListeBasesDonnee.getCoutListeBase();
 		ArrayList<Base> listeBases = ListeBasesDonnee.getListeBases();
 		ArrayList<Base> newlisteBases = new ArrayList<Base>();
@@ -59,7 +60,7 @@ public class Branch_and_bound {
 	}
 	
 	
-	public  boolean Match(String entreprise, ArrayList<String> listeEntreprises) {
+	public boolean Match(String entreprise, ArrayList<String> listeEntreprises) {
 		for (String ent : listeEntreprises) {
 			if (ent.equals(entreprise))
 				return true;
@@ -67,23 +68,22 @@ public class Branch_and_bound {
 		return false;
 	}
 	
-	//ça la fonctionne Glouton (il faut changer le nom) 
-	public  double BBFunction_Binaire(ListeBases listeBases, ListeEntreprises listeEntreprise) {
-		double UB = Double.POSITIVE_INFINITY;
+	
+	public double Glouton() {
+		//double UB = Double.POSITIVE_INFINITY;
 		int currentBest = 0;
 		
-		int LB = listeEntreprise.getCoutListeEntreprise() + listeBases.getCoutListeBase();
+		//LB = LowerBound
+		int LB = _listeEntCherche.getCoutListeEntreprise() + _listeBases.getCoutListeBase();
 		ArrayList<String> LEnt = new ArrayList<String>();
-		ArrayList<String> listeEnt = listeEntreprise.getListeEntreprises();
+		ArrayList<String> listeEnt = _listeEntCherche.getListeEntreprises();
 		
 		//trier les bases en fonction le cout
-		ArrayList<Base> ListBase = this.trierListBase(listeBases).getListeBases();
+		ArrayList<Base> ListBase = Donnees.trierListBase(_listeBases).getListeBases();
 		
 		int indice = 0;
-		//Tant que A n'est pas vide:
-		while(ListBase.size() != 0) {
-			
-			Base k = ListBase.get(indice); //Base1.txt
+		while(ListBase.size() != 0) {	
+			Base k = ListBase.get(indice); 
 			ListBase.remove(indice);
 			//rentre dans la Base1.txt	
 			for(int i = 0 ; i < k.getEntreprises().size()  ; i++ ) {			
@@ -98,10 +98,6 @@ public class Branch_and_bound {
 				}	
 			}	
 		}	
-		
-		for (String str : LEnt) {
-			System.out.println(str);
-		}
 		return UB;
 	}
 	
@@ -116,8 +112,7 @@ public class Branch_and_bound {
 					toRemove.add(ent);
 					delete = true;
 				}			
-		}
-		
+		}	
 		listeEntCherche.removeAll(toRemove);
 		return delete;
 	}
@@ -132,58 +127,42 @@ public class Branch_and_bound {
 		return -1;
 	}	
 	
-	
-	//Fonction qui permet de vérifier si la liste 1 contient tout les éléments de la liste 2 
-	private  static boolean checkList (ArrayList<String> list1, ArrayList<String> list2) {
-		if (list1.containsAll(list2)) 
-			return true;
-		return false;
-		
-	}
+
 	
 	
 	public double BnB() {
-		double UB = Double.POSITIVE_INFINITY;
 		int currentBest = 0;
-		
-		//une liste vide pour ajouter les entresprises trouvé
-		//Cette liste est pour ajouter dans le filsGauche
-		ArrayList<String> liste = new ArrayList<String>();
-	
-		Noeud racine = new Noeud(this._listeBases);	
+		int LB = this._listeEntCherche.getCoutListeEntreprise() + this._listeBases.getCoutListeBase();
+			
+		Noeud racine = new Noeud(this._listeBases, LB);	
 		ArrayList<Noeud> ListeNoeds = Noeud.ListeNoeds;
 		
-		int LB = this._listeEntCherche.getCoutListeEntreprise();
 		int index = 0;
 		while(ListeNoeds.size() !=0) {
 			Noeud n = ListeNoeds.get(index);
-			//ListeNoeds.remove(index);
-			recursivité(n, liste, ListeNoeds, LB, UB);	
+			ListeNoeds.remove(index);
+			recursivité(n, n.getListEntNoeud(), ListeNoeds, LB);	
 		}
 		return UB;
 	}
 	
-	public static void recursivité(Noeud n, ArrayList<String> listeEntDansNoeud, ArrayList<Noeud> ListeNoeds, int LB, double UB) {
 
-		if (ListeNoeds.size()!= 0) {
-			System.out.println("dsqd" + ListeNoeds.size());
-			ListeNoeds.remove(0);
-		
-			for (int i=0; i<ListBases.size(); i++) {		
-				if (!n.getParcourirBase()[i]) {
-					n.appliquerBase(ListBases.get(i), ListEntCherche, n.getListEntNoeud(), n.getCout(), UB);
-					n.getFilsGauche().setParcourirBase(i);
-					n.getFilsDroit().setParcourirBase(i);
-					if (checkList(ListEntCherche, n.getFilsGauche().getListEntNoeud())) {
-						UB = n.getFilsGauche().getCout();
-						ListeNoeds.remove(0);
-						recursivité(ListeNoeds.get(0), ListeNoeds.get(0).getListEntNoeud(), ListeNoeds, ListeNoeds.get(0).getCout(), UB);
+	public void recursivité(Noeud n, ArrayList<String> listeEntDansNoeud, ArrayList<Noeud> ListeNoeds, int LB) {
+		for (int i=0; i<ListBases.size(); i++) {		
+			if (!n.getParcourirBase().get(i)) {
+				int new_cout = n.getCout() + ListBases.get(i).getCoutBase();		
+				if (new_cout > UB) {
+					break;
+				} else {
+					if (n.getListEntNoeud().containsAll(ListEntCherche)) {
+						this.UB = n.getCout();
+						break;
 					} else {
-						recursivité(ListeNoeds.get(0), ListeNoeds.get(0).getListEntNoeud(), ListeNoeds, ListeNoeds.get(0).getCout(), UB);
+						n.appliquerBase(ListBases.get(i), ListEntCherche, listeEntDansNoeud, new_cout, UB, this, i);
+						break;
 					}
 				}
 			}
-		}
+		}				
 	}
-	
 }
