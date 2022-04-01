@@ -56,7 +56,7 @@ public class Base {
 	}
 	
 	public String toString() {
-		return this._namefichier;
+		return this._namefichier.substring(11);
 	}
 	
 	

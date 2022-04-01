@@ -48,30 +48,38 @@ public class Test {
 		ListeEntreprises listeEnt3 = new ListeEntreprises("Data/Scénarios/Liste Entreprises/Liste_Ent3.txt");
 		
 		
+		//ArrayList<Integer> ListTrierEnCout = Donnees.trierCout(listBases2);
+		
+		ArrayList<Base> ListBaseTrier1 = Donnees.trierListBase(listBases1).getListeBases();
+		listBases1.set_listeBases(ListBaseTrier1);
+		
+		
+		ArrayList<Base> ListBaseTrier2 = Donnees.trierListBase(listBases2).getListeBases();
+		listBases2.set_listeBases(ListBaseTrier2);
 	
-		ArrayList<Integer> ListCout = Donnees.trierCout(listBases2);
-		System.out.println(ListCout);
-		System.out.println(ListCout.size());
-	
+		ArrayList<Base> ListBaseTrier3 = Donnees.trierListBase(listBases3).getListeBases();
+		listBases3.set_listeBases(ListBaseTrier3);
+
 		
+		System.out.println("********************************************");	
+		System.out.println("Scénario 1 :");
+		Donnees BB1 = new Donnees(listBases1,listeEnt1);
+		System.out.println("BnB : " + BB1.BnB());
+		System.out.println("Glouton : " + BB1.Glouton());
 		
-		//double cost1 = Branch_and_bound.BBFunction_Binaire(listBases1, listeEnt1);
-		//System.out.println(  cost1);
+		System.out.println();
+		System.out.println("********************************************");
+		System.out.println("Scénario 2 :");	
+		Donnees BB2 = new Donnees(listBases2,listeEnt2);
+		System.out.println("BnB : " + BB2.BnB());
+		System.out.println("Glouton : " + BB2.Glouton());
 		
-		
-		//double cost2 = Branch_and_bound.BBFunction_Binaire(listBases2, listeEnt2);
-		//System.out.println( cost2);
-		
-		
-		//double cost3 = Branch_and_bound.BBFunction_Binaire(listBases3, listeEnt3);
-		//System.out.println( cost3);
-		
-		
-		System.out.println("****************");
-		
-		Donnees BB1 = new Donnees(listBases2,listeEnt2);
-		System.out.println("BnB " + BB1.BnB());
-		System.out.println("Glouton " + BB1.Glouton());
+		System.out.println();
+		System.out.println("*********************************************");
+		System.out.println("Scénario 3 :");
+		Donnees BB3 = new Donnees(listBases3,listeEnt3);
+		System.out.println("BnB : " + BB3.BnB());
+		System.out.println("Glouton : " + BB3.Glouton());
 		
 	}
 }

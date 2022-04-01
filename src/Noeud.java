@@ -9,7 +9,7 @@ public class Noeud {
 	private Noeud _filsDroit;
 	private ArrayList<String> _listeEnt = new ArrayList<String>();
 	private ArrayList<Boolean> _parcouruBase = new ArrayList<Boolean>();
-	private ArrayList<String> _listeBase = new ArrayList<String>();
+	private ArrayList<String> _listeBaseNoeud = new ArrayList<String>();
 	
 	public static ArrayList<Noeud> ListeNoeds = new ArrayList<Noeud>();
 	//public static Noeud _racine;
@@ -44,7 +44,7 @@ public class Noeud {
 		ArrayList<String> new_list = new ArrayList<String>(liste);
 		Donnees bb = bnb;
 			//filsDroit : on n'applique pas la base
-			this.addFilsDroit(liste, "not applique" + b.toString(), this._cout,i);
+			this.addFilsDroit(liste, "not applique" + b.toString(), this._cout,i, b);
 
 			//filsGauche : on applique la base		
 			ArrayList<String> listeEntBase = b.getEntreprises();
@@ -54,27 +54,30 @@ public class Noeud {
 						new_list.add(ent);
 				}
 			}
-			this.addFilsGauche(new_list, "applique" + b.toString(), cout, i);	
+			this.addFilsGauche(new_list, "applique" + b.toString(), cout, i, b);	
 	}
 
-	public void addFilsGauche(ArrayList<String> listEnt, String name, int cout, int i) {
+	public void addFilsGauche(ArrayList<String> listEnt, String name, int cout, int i, Base b) {
 		Noeud n = new Noeud(listEnt);
 		n.setName(name);
 		this._filsGauche = n;
 		n.iniParcourirBase(_parcouruBase);
 		n.setParcourirBase(i);
 		n.setCout(cout);
+		n.initListBasesNoeud(_listeBaseNoeud);
+		n.addBaseNoeud(b.toString());
 		this.ListeNoeds.add(0,n);
 	}
 	
 	
-	public void addFilsDroit(ArrayList<String> listEnt, String name, int cout, int i) {
+	public void addFilsDroit(ArrayList<String> listEnt, String name, int cout, int i, Base b) {
 		Noeud n = new Noeud(listEnt);
 		n.setName(name);
 		this._filsDroit = n;
 		n.iniParcourirBase(_parcouruBase);
 		n.setParcourirBase(i);
 		n.setCout(cout);
+		n.initListBasesNoeud(_listeBaseNoeud);
 		this.ListeNoeds.add(0,n);
 	}
 	
@@ -84,9 +87,20 @@ public class Noeud {
 	}
 	
 	
-	public void addBase(String base) {
-		
+	public ArrayList<String> getListBasesNoeud() {
+		return this._listeBaseNoeud;
 	}
+	
+	public void addBaseNoeud(String base) {
+		this._listeBaseNoeud.add(base);
+	}
+	
+	
+	
+	public void initListBasesNoeud(ArrayList<String> liste) {
+		this._listeBaseNoeud = new ArrayList<String>(liste);
+	}
+	
 	
 	public void iniParcourirBase(ArrayList<Boolean> table) {
 		this._parcouruBase = new ArrayList<Boolean>(table);
@@ -131,6 +145,16 @@ public class Noeud {
 	
 	public Noeud getFilsGauche() {
 		return this._filsGauche;
+	}
+	
+	
+	
+	public void afficherListBasesNoeud() {
+		System.out.print("[");
+		for (String str : this._listeBaseNoeud) {
+			System.out.print(str + " ");
+		}
+		System.out.println("]");
 	}
 	
 	
